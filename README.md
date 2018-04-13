@@ -2,6 +2,10 @@
 
 Generate Unique ID.
 
+```
+go get github.com/newm4n/go-jenius-unique
+```
+
 ## HOW ???
 
 You should read the test class  `idgen_test.go` on how to use the library.
