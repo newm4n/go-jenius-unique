@@ -7,6 +7,7 @@ import (
 	"net"
 	"sync"
 	"time"
+	"math"
 )
 
 const (
@@ -28,7 +29,6 @@ func GetUniqueGenInstance() *UniqueGen {
 	if UniqueGenInstance == nil {
 		var ifacen int64 = 0
 		interfaces, err := net.Interfaces()
-
 		if err == nil {
 			for _, i := range interfaces {
 				if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
@@ -44,7 +44,7 @@ func GetUniqueGenInstance() *UniqueGen {
 		}
 		UniqueGenInstance = &UniqueGen{
 			Nano:  time.Now().UnixNano() / 1000,
-			Iface: ifacen,
+			Iface: int64(math.Abs(float64(ifacen))),
 			Count: 0,
 		}
 	}
@@ -61,11 +61,8 @@ func (ug *UniqueGen) NewXReferenceNo(length int) string {
 		ug.Count = 0
 	}
 	ug.Nano = nnano
-	if ug.Count == 0 {
-		strRnd = fmt.Sprintf("%x", ug.Nano^ug.Iface)[1:]
-	} else {
-		strRnd = fmt.Sprintf("%x", ug.Nano^ug.Iface^ug.Count)[1:]
-	}
+	strRnd = fmt.Sprintf("%x%x", ug.Nano^ug.Iface,ug.Count)[1:]
+
 	if len(strRnd) > length {
 		strRnd = strRnd[len(strRnd)-length:]
 	} else if len(strRnd) < length {

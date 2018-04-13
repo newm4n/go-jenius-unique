@@ -8,7 +8,8 @@ import (
 
 func Threaded(cc chan string) {
 	for x := 0; x < 100; x++ {
-		cc <- GetUniqueGenInstance().NewXReferenceNo(24)
+		//time.Sleep(time.Second)
+		cc <- GetUniqueGenInstance().NewXReferenceNo(15)
 	}
 }
 
